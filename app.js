@@ -1,5 +1,5 @@
 const tbody = document.getElementById("tbody");
-
+const tbody2 = document.getElementById("tbody2");
 const getDaysInMonth = (month, year) => (new Array(31)).fill('').map((v, i) => new Date(year, month - 1, i + 1)).filter(v => v.getMonth() === month - 1)
 
 
@@ -19,7 +19,7 @@ console.log(users);
 function plan() {
     console.log("-------------------------------")
 
-    tbody.innerHTML="";
+    tbody.innerHTML = "";
     var line = "";
     let history = [days.length + 1];
     history[0] = {
@@ -29,7 +29,7 @@ function plan() {
         "pgece": -1
     };
     users_limit = [];
-    let limit = Math.floor(days.length * 4 / users.length) + 1;
+    let limit = Math.floor(days.length * 4 / users.length) ;
     console.log("limit, ", limit);
     for (let index = 0; index < days.length; index++) {
         let day = ""
@@ -67,8 +67,8 @@ function plan() {
 
         while (history[index].tgece == tgunduz || history[index].tgece == pgunduz || history[index].tgece == pgece || history[index].tgece == tgece ||
             history[index].pgece == pgunduz || history[index].pgece == tgece || history[index].pgece == tgunduz || history[index].pgece == pgece ||
-            users_limit.filter(i => i == tgunduz).length > limit - 1 || users_limit.filter(i => i == tgece).length > limit - 1 || users_limit.filter(i => i == pgunduz).length > limit - 1 || users_limit.filter(i => i == pgece).length > limit - 1 ||
-            // users_limit.filter(i => i == tgunduz).length < limit -4 || users_limit.filter(i => i == tgece).length < limit -4 || users_limit.filter(i => i == pgunduz).length < limit -4 || users_limit.filter(i => i == pgece).length < limit -4 ||
+            users_limit.filter(i => i == tgunduz).length > limit || users_limit.filter(i => i == tgece).length > limit|| users_limit.filter(i => i == pgunduz).length > limit || users_limit.filter(i => i == pgece).length > limit ||
+            // users_limit.filter(i => i == tgunduz).length < limit -3 || users_limit.filter(i => i == tgece).length < limit -3 || users_limit.filter(i => i == pgunduz).length < limit -3 || users_limit.filter(i => i == pgece).length < limit -3 ||
             tgunduz == tgece || tgunduz == pgunduz || tgunduz == pgece || tgece == pgunduz || tgece == pgece || pgunduz == pgece) {
             tgunduz = Math.floor(Math.random() * users.length);
             tgece = Math.floor(Math.random() * users.length);
@@ -100,9 +100,17 @@ function plan() {
         users_limit.push(tgunduz, tgece, pgunduz, pgece)
     }
 
+    console.log(history);
+    tbody2.innerHTML = "";
     for (let x = 0; x < users.length; x++) {
-        var t = history.filter(i => i.tgece == x || i.tgunduz == x || i.pgece == x || i.pgunduz == x).length;
-        console.log(users[x], " : ", t);
+        var total_days = history.filter(i => i.tgece == x || i.tgunduz == x || i.pgece == x || i.pgunduz == x).length;
+        var total_hours = history.filter(i => i.tgece == x).length * 10 + history.filter(i => i.tgunduz == x).length * 8.5 + history.filter(i => i.pgece == x).length * 13.5 + history.filter(i => i.pgunduz == x).length * 8.5;
+        console.log(users[x], " : ", total_days, total_hours);
+        tbody2.innerHTML += `
+        <td>${users[x]}</td>
+        <td>${total_days}</td>
+        <th>${total_hours}</th>
+        `
     }
     users_limit = [];
     history = [];
