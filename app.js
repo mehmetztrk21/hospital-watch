@@ -29,7 +29,7 @@ function plan() {
         "pgece": -1
     };
     users_limit = [];
-    let limit = Math.floor(days.length * 4 / users.length) ;
+    let limit = Math.floor(days.length * 4 / users.length) + 1;
     console.log("limit, ", limit);
     for (let index = 0; index < days.length; index++) {
         let day = ""
@@ -60,21 +60,42 @@ function plan() {
                 break;
         }
 
-        let tgunduz = -1;
-        let tgece = -1;
-        let pgunduz = -1;
-        let pgece = -1;
+        let tgunduz = Math.floor(Math.random() * users.length);
+        let tgece = Math.floor(Math.random() * users.length);
+        let pgunduz = Math.floor(Math.random() * users.length);
+        let pgece = Math.floor(Math.random() * users.length);
+        console.log("------------------ÖNCE----------------------------")
+        console.log(users_limit.filter(i => i == tgunduz).length);
+        console.log(users_limit.filter(i => i == tgece).length);
+        console.log(users_limit.filter(i => i == pgunduz).length);
+        console.log(users_limit.filter(i => i == pgece).length);
 
         while (history[index].tgece == tgunduz || history[index].tgece == pgunduz || history[index].tgece == pgece || history[index].tgece == tgece ||
             history[index].pgece == pgunduz || history[index].pgece == tgece || history[index].pgece == tgunduz || history[index].pgece == pgece ||
-            users_limit.filter(i => i == tgunduz).length > limit || users_limit.filter(i => i == tgece).length > limit|| users_limit.filter(i => i == pgunduz).length > limit || users_limit.filter(i => i == pgece).length > limit ||
-            // users_limit.filter(i => i == tgunduz).length < limit -3 || users_limit.filter(i => i == tgece).length < limit -3 || users_limit.filter(i => i == pgunduz).length < limit -3 || users_limit.filter(i => i == pgece).length < limit -3 ||
+            users_limit.filter(i => i == tgunduz).length > limit - 1 || users_limit.filter(i => i == tgece).length > limit - 1 || users_limit.filter(i => i == pgunduz).length > limit - 1 || users_limit.filter(i => i == pgece).length > limit - 1 ||
+            //users_limit.filter(i => i == tgunduz).length < 13 || users_limit.filter(i => i == tgece).length < 13 || users_limit.filter(i => i == pgunduz).length < 13 || users_limit.filter(i => i == pgece).length < 13 ||
             tgunduz == tgece || tgunduz == pgunduz || tgunduz == pgece || tgece == pgunduz || tgece == pgece || pgunduz == pgece) {
-            tgunduz = Math.floor(Math.random() * users.length);
-            tgece = Math.floor(Math.random() * users.length);
-            pgunduz = Math.floor(Math.random() * users.length);
-            pgece = Math.floor(Math.random() * users.length);
+            if (users_limit.filter(i => i == tgunduz).length > limit - 1)
+                tgunduz = Math.floor(Math.random() * users.length);
+            else if (users_limit.filter(i => i == tgece).length > limit - 1)
+                tgece = Math.floor(Math.random() * users.length);
+            else if (users_limit.filter(i => i == pgunduz).length > limit - 1)
+                pgunduz = Math.floor(Math.random() * users.length);
+            else if (users_limit.filter(i => i == pgece).length > limit - 1)
+                pgece = Math.floor(Math.random() * users.length);
+            else {
+                tgunduz = Math.floor(Math.random() * users.length);
+                tgece = Math.floor(Math.random() * users.length);
+                pgunduz = Math.floor(Math.random() * users.length);
+                pgece = Math.floor(Math.random() * users.length);
+            }
         }
+        console.log(users_limit.filter(i => i == tgunduz).length > limit || users_limit.filter(i => i == tgece).length > limit || users_limit.filter(i => i == pgunduz).length > limit || users_limit.filter(i => i == pgece).length > limit)
+        console.log("----------------SONRA------------------------------")
+        console.log(users_limit.filter(i => i == tgunduz).length);
+        console.log(users_limit.filter(i => i == tgece).length);
+        console.log(users_limit.filter(i => i == pgunduz).length);
+        console.log(users_limit.filter(i => i == pgece).length);
         if (day == "Cumartesi" || day == "Pazar") {
             line += `<tr style="background-color:yellow">`
         } else {
