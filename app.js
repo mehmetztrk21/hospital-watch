@@ -8,9 +8,15 @@ const days = getDaysInMonth(date.getMonth() + 1, date.getFullYear());
 const days2 = [...days];
 
 const usersDiv = document.getElementById("users");
-if(localStorage.getItem("users")===null){
-    localStorage.setItem("users",[])
-}
+if (localStorage.getItem("users") === null)
+    localStorage.setItem("users", [])
+
+if (localStorage.getItem("watch_table") != null && tbody)
+    tbody.innerHTML = localStorage.getItem("watch_table");
+
+if (localStorage.getItem("result_table") != null && tbody2)
+    tbody2.innerHTML = localStorage.getItem("result_table");
+
 const users = localStorage.getItem("users").split(",");
 
 try {
@@ -20,15 +26,15 @@ try {
         <li id="user_${index}" class="list-group-item mt-1">${user}  <i onClick="removeUser(${index})" id="trash" class="fas fa-trash" style="float:right;color:red"></i></li>
     
         `
-        else{
-            users.splice(index,1);
-            localStorage.setItem("users",users);
+        else {
+            users.splice(index, 1);
+            localStorage.setItem("users", users);
         }
 
     });
-    
+
 } catch (error) {
-    
+
 }
 
 
@@ -134,6 +140,9 @@ function plan() {
             <td>${total_days}</td>
             <th>${total_hours}</th>
             `
+
+            localStorage.setItem("result_table", tbody2.innerHTML);
+            localStorage.setItem("watch_table", tbody.innerHTML);
         }
     }
     else {
