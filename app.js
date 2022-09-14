@@ -11,7 +11,6 @@ localStorage.setItem("users", ["Azad Öztürk", "Mehmet Öztürk", "Ali Can", "V
 const users = localStorage.getItem("users").split(",");
 
 function plan() {
-    console.log("başa geldi.")
     tbody.innerHTML = "";
     var line = "";
     let limit = Math.floor(days.length * 4 / users.length); //kişi en fazla ortalamanın 1 fazlası kadar nöbet tutabilir.
@@ -24,7 +23,6 @@ function plan() {
         "pgece": -1
     };
     users_limit = [];
-    console.log("limit, ", limit);
     for (let index = 0; index < days.length; index++) {
         let day = ""
         switch (days[index].getDay()) {
@@ -72,9 +70,7 @@ function plan() {
             pgunduz = Math.floor(Math.random() * users.length);
             pgece = Math.floor(Math.random() * users.length);
         }
-        if(count2>1700){
-           
-            console.log("girdi");
+        if (count2 > 2500) {
             document.getElementById("btn").click();
             break;
         }
@@ -105,7 +101,7 @@ function plan() {
     }
     tbody2.innerHTML = "";
     for (let x = 0; x < users.length; x++) {
-        var total_days = history.filter(i => i.tgece == x).length + history.filter(i => i.tgunduz == x).length + history.filter(i => i.pgece == x).length + history.filter(i => i.pgunduz == x).length ;
+        var total_days = history.filter(i => i.tgece == x).length + history.filter(i => i.tgunduz == x).length + history.filter(i => i.pgece == x).length + history.filter(i => i.pgunduz == x).length;
         var total_hours = history.filter(i => i.tgece == x).length * 10 + history.filter(i => i.tgunduz == x).length * 8.5 + history.filter(i => i.pgece == x).length * 13.5 + history.filter(i => i.pgunduz == x).length * 8.5;
         tbody2.innerHTML += `
         <td> ${users[x]}</td>
