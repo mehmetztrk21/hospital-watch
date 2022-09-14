@@ -9,19 +9,14 @@ const days2 = [...days];
 localStorage.setItem("users", ["Azad Öztürk", "Mehmet Öztürk", "Ali Can", "Veli Can", "Ayşe Sönmez", "Halit Can", "Kutlu Yılmaz", "Beyza Orman", "Yıldız Kara"])
 
 const users = localStorage.getItem("users").split(",");
-console.log(users);
-
-
-
-
-
 
 function plan() {
-    console.log("-------------------------------")
-
+    console.log("başa geldi.")
     tbody.innerHTML = "";
     var line = "";
+    let limit = Math.floor(days.length * 4 / users.length); //kişi en fazla ortalamanın 1 fazlası kadar nöbet tutabilir.
     let history = [days.length + 1];
+
     history[0] = {
         "tgunduz": -1,
         "tgece": -1,
@@ -29,7 +24,6 @@ function plan() {
         "pgece": -1
     };
     users_limit = [];
-    let limit = Math.floor(days.length * 4 / users.length) + 1;
     console.log("limit, ", limit);
     for (let index = 0; index < days.length; index++) {
         let day = ""
@@ -64,47 +58,36 @@ function plan() {
         let tgece = Math.floor(Math.random() * users.length);
         let pgunduz = Math.floor(Math.random() * users.length);
         let pgece = Math.floor(Math.random() * users.length);
-        console.log("------------------ÖNCE----------------------------")
-        console.log(users_limit.filter(i => i == tgunduz).length);
-        console.log(users_limit.filter(i => i == tgece).length);
-        console.log(users_limit.filter(i => i == pgunduz).length);
-        console.log(users_limit.filter(i => i == pgece).length);
-
+        let count2 = 0;
         while (history[index].tgece == tgunduz || history[index].tgece == pgunduz || history[index].tgece == pgece || history[index].tgece == tgece ||
             history[index].pgece == pgunduz || history[index].pgece == tgece || history[index].pgece == tgunduz || history[index].pgece == pgece ||
-            users_limit.filter(i => i == tgunduz).length > limit - 1 || users_limit.filter(i => i == tgece).length > limit - 1 || users_limit.filter(i => i == pgunduz).length > limit - 1 || users_limit.filter(i => i == pgece).length > limit - 1 ||
+            users_limit.filter(i => i == tgunduz).length > limit || users_limit.filter(i => i == tgece).length > limit || users_limit.filter(i => i == pgunduz).length > limit || users_limit.filter(i => i == pgece).length > limit ||
             //users_limit.filter(i => i == tgunduz).length < 13 || users_limit.filter(i => i == tgece).length < 13 || users_limit.filter(i => i == pgunduz).length < 13 || users_limit.filter(i => i == pgece).length < 13 ||
             tgunduz == tgece || tgunduz == pgunduz || tgunduz == pgece || tgece == pgunduz || tgece == pgece || pgunduz == pgece) {
-            if (users_limit.filter(i => i == tgunduz).length > limit - 1)
-                tgunduz = Math.floor(Math.random() * users.length);
-            else if (users_limit.filter(i => i == tgece).length > limit - 1)
-                tgece = Math.floor(Math.random() * users.length);
-            else if (users_limit.filter(i => i == pgunduz).length > limit - 1)
-                pgunduz = Math.floor(Math.random() * users.length);
-            else if (users_limit.filter(i => i == pgece).length > limit - 1)
-                pgece = Math.floor(Math.random() * users.length);
-            else {
-                tgunduz = Math.floor(Math.random() * users.length);
-                tgece = Math.floor(Math.random() * users.length);
-                pgunduz = Math.floor(Math.random() * users.length);
-                pgece = Math.floor(Math.random() * users.length);
-            }
+            count2++;
+            if (count2 > 2500)
+                break;
+            tgunduz = Math.floor(Math.random() * users.length);
+            tgece = Math.floor(Math.random() * users.length);
+            pgunduz = Math.floor(Math.random() * users.length);
+            pgece = Math.floor(Math.random() * users.length);
         }
-        console.log(users_limit.filter(i => i == tgunduz).length > limit || users_limit.filter(i => i == tgece).length > limit || users_limit.filter(i => i == pgunduz).length > limit || users_limit.filter(i => i == pgece).length > limit)
-        console.log("----------------SONRA------------------------------")
-        console.log(users_limit.filter(i => i == tgunduz).length);
-        console.log(users_limit.filter(i => i == tgece).length);
-        console.log(users_limit.filter(i => i == pgunduz).length);
-        console.log(users_limit.filter(i => i == pgece).length);
+        if(count2>1700){
+           
+            console.log("girdi");
+            document.getElementById("btn").click();
+            break;
+        }
+
         if (day == "Cumartesi" || day == "Pazar") {
-            line += `<tr style="background-color:yellow">`
+            line += `<tr style="background-color:yellow;color:black;">`
         } else {
             line += `<tr>`
         }
         line += `
-        <th scope="row" style="font-weight: bold">${days[index].getDate()}/${days[index].getMonth()+1}/${days[index].getUTCFullYear()}</th>
+        <th scope="row" style="font-weight: bold">${days[index].getDate()}/${days[index].getMonth() + 1}/${days[index].getUTCFullYear()}</th>
         <td style="font-weight: bold">${day}</td>
-        <td>${users[tgunduz]}</td>
+        <td> ${users[tgunduz]}</td>
         <td>${users[tgece]}</td>
         <th>${users[pgunduz]}</th>
         <th>${users[pgece]}</th>
@@ -118,17 +101,16 @@ function plan() {
             "pgunduz": pgunduz,
             "pgece": pgece
         };
-        users_limit.push(tgunduz, tgece, pgunduz, pgece)
+        users_limit.push(tgunduz, tgece, pgunduz, pgece);
     }
-
-    console.log(history);
+    console.log("users_limit : ", users_limit)
+    console.log("history : ", history);
     tbody2.innerHTML = "";
     for (let x = 0; x < users.length; x++) {
-        var total_days = history.filter(i => i.tgece == x || i.tgunduz == x || i.pgece == x || i.pgunduz == x).length;
+        var total_days = history.filter(i => i.tgece == x).length + history.filter(i => i.tgunduz == x).length + history.filter(i => i.pgece == x).length + history.filter(i => i.pgunduz == x).length ;
         var total_hours = history.filter(i => i.tgece == x).length * 10 + history.filter(i => i.tgunduz == x).length * 8.5 + history.filter(i => i.pgece == x).length * 13.5 + history.filter(i => i.pgunduz == x).length * 8.5;
-        console.log(users[x], " : ", total_days, total_hours);
         tbody2.innerHTML += `
-        <td>${users[x]}</td>
+        <td> ${users[x]}</td>
         <td>${total_days}</td>
         <th>${total_hours}</th>
         `
