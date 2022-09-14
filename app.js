@@ -87,10 +87,10 @@ function plan() {
         line += `
         <th scope="row" style="font-weight: bold">${days[index].getDate()}/${days[index].getMonth() + 1}/${days[index].getUTCFullYear()}</th>
         <td style="font-weight: bold">${day}</td>
-        <td> ${users[tgunduz]}</td>
-        <td>${users[tgece]}</td>
-        <th>${users[pgunduz]}</th>
-        <th>${users[pgece]}</th>
+        <td> <input type="text" class="form-control" value=${users[tgunduz]} /></td>
+        <td> <input type="text" class="form-control" value=${users[tgece]} /></td>
+        <th><input type="text" class="form-control" value=${users[pgunduz]} /></th>
+        <th><input type="text" class="form-control" value=${users[pgece]} /></th>
     </tr>
         `
         render(line);
@@ -103,8 +103,6 @@ function plan() {
         };
         users_limit.push(tgunduz, tgece, pgunduz, pgece);
     }
-    console.log("users_limit : ", users_limit)
-    console.log("history : ", history);
     tbody2.innerHTML = "";
     for (let x = 0; x < users.length; x++) {
         var total_days = history.filter(i => i.tgece == x).length + history.filter(i => i.tgunduz == x).length + history.filter(i => i.pgece == x).length + history.filter(i => i.pgunduz == x).length ;
