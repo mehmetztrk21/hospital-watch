@@ -6,16 +6,40 @@ const getDaysInMonth = (month, year) => (new Array(31)).fill('').map((v, i) => n
 const date = new Date();
 const days = getDaysInMonth(date.getMonth() + 1, date.getFullYear());
 const days2 = [...days];
-localStorage.setItem("users", ["Azad Öztürk", "Mehmet Öztürk", "Ali Can", "Veli Can", "Ayşe Sönmez", "Halit Can", "Kutlu Yılmaz", "Beyza Orman", "Yıldız Kara"])
 
+const usersDiv = document.getElementById("users");
+if(localStorage.getItem("users")===null){
+    localStorage.setItem("users",[])
+}
 const users = localStorage.getItem("users").split(",");
 
+try {
+    users.forEach((user, index) => {
+        if (user.length > 0)
+            usersDiv.innerHTML += `
+        <li id="user_${index}" class="list-group-item mt-1">${user}  <i onClick="removeUser(${index})" id="trash" class="fas fa-trash" style="float:right;color:red"></i></li>
+    
+        `
+        else{
+            users.splice(index,1);
+            localStorage.setItem("users",users);
+        }
+
+    });
+    
+} catch (error) {
+    
+}
+
+
+let x = 0;
 function plan() {
+    x++;
+    console.log("start plan.", x)
     tbody.innerHTML = "";
     var line = "";
     let limit = Math.floor(days.length * 4 / users.length); //kişi en fazla ortalamanın 1 fazlası kadar nöbet tutabilir.
     let history = [days.length + 1];
-
     history[0] = {
         "tgunduz": -1,
         "tgece": -1,
@@ -71,6 +95,7 @@ function plan() {
             pgece = Math.floor(Math.random() * users.length);
         }
         if (count2 > 2500) {
+            tbody.innerHTML = ""
             document.getElementById("btn").click();
             break;
         }
@@ -100,15 +125,21 @@ function plan() {
         users_limit.push(tgunduz, tgece, pgunduz, pgece);
     }
     tbody2.innerHTML = "";
-    for (let x = 0; x < users.length; x++) {
-        var total_days = history.filter(i => i.tgece == x).length + history.filter(i => i.tgunduz == x).length + history.filter(i => i.pgece == x).length + history.filter(i => i.pgunduz == x).length;
-        var total_hours = history.filter(i => i.tgece == x).length * 10 + history.filter(i => i.tgunduz == x).length * 8.5 + history.filter(i => i.pgece == x).length * 13.5 + history.filter(i => i.pgunduz == x).length * 8.5;
-        tbody2.innerHTML += `
-        <td> ${users[x]}</td>
-        <td>${total_days}</td>
-        <th>${total_hours}</th>
-        `
+    if (tbody.innerHTML.length > 0) {
+        for (let x = 0; x < users.length; x++) {
+            var total_days = history.filter(i => i.tgece == x).length + history.filter(i => i.tgunduz == x).length + history.filter(i => i.pgece == x).length + history.filter(i => i.pgunduz == x).length;
+            var total_hours = history.filter(i => i.tgece == x).length * 10 + history.filter(i => i.tgunduz == x).length * 8.5 + history.filter(i => i.pgece == x).length * 13.5 + history.filter(i => i.pgunduz == x).length * 8.5;
+            tbody2.innerHTML += `
+            <td> ${users[x]}</td>
+            <td>${total_days}</td>
+            <th>${total_hours}</th>
+            `
+        }
     }
+    else {
+        document.getElementById("btn").click();
+    }
+
     users_limit = [];
     history = [];
 }
@@ -117,3 +148,24 @@ function plan() {
 const render = (line) => {
     tbody.innerHTML += line;
 };
+
+
+function addUser() {
+    const userName = document.getElementById("userName");
+    if (userName.value.length > 0) {
+        users.push(userName.value);
+        localStorage.setItem("users", users)
+        usersDiv.innerHTML += `
+            <li class="list-group-item mt-1" id="user_${users.length - 1}">${userName.value} <i onClick="removeUser(users.length-1)" id="trash" class="fas fa-trash" style="float:right;color:red"></i></li>
+        `
+        document.getElementById("userName").value = "";
+    }
+
+}
+
+function removeUser(index) {
+    users.splice(index, 1);
+    localStorage.setItem("users", users);
+    console.log("removed", index);
+    document.getElementById("user_" + index).remove();
+}
